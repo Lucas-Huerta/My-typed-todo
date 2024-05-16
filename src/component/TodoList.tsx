@@ -2,39 +2,38 @@ import  { useState } from "react";
 import { TodoItem,} from "../model/todo-item";
 import { TodoStatus } from "../model/todo-status";
 import { Todopriority } from "../model/todo-priority";
-
+import { TaskManager } from '../utils/TaskManager';
 
 const TodoList = () => {
-    const [tasks, setTasks] = useState<TodoItem[]>([]); 
+    const { taskList, addTask, removeTask } = TaskManager();
     const [newTask, setNewTask] = useState<TodoItem>({
         id: 0,
-        description: "",
+        description: '',
         duDate: { day: 0, month: 0, year: 0, hour: 0, minute: 0 },
         status: TodoStatus.TODO,
         priority: Todopriority.LOW
     });
 
-    const addTask = () => {
-        if (newTask.description.trim() !== "") {
-            setTasks([...tasks, newTask]);
+    const handleAddTask = () => {
+        if (newTask.description.trim() !== '') {
+            addTask(newTask);
             setNewTask({
                 id: newTask.id + 1,
-                description: "",
+                description: '',
                 duDate: { day: 0, month: 0, year: 0, hour: 0, minute: 0 },
                 status: TodoStatus.TODO,
                 priority: Todopriority.LOW
             });
         }
     };
-    
-    const removeTask = (id: number) => {
-        const newTasks = tasks.filter(task => task.id !== id);
-        setTasks(newTasks);
+
+    const handleRemoveTask = (taskId: number) => {
+        removeTask(taskId);
     };
 
-    const filterTasksByStatus = (status: TodoStatus) => {
-        return tasks.filter(task => task.status === status);
-    };
+    function padZero(num: number): string {
+        return num < 10 ? `0${num}` : `${num}`;
+    }
 
     return (
         <div>
@@ -64,7 +63,7 @@ const TodoList = () => {
                 </select>
                 <input 
                     type="date"
-                    value={`${newTask.duDate.year}-${newTask.duDate.month}-${newTask.duDate.day}`}
+                    value={`${newTask.duDate.year}-${padZero(newTask.duDate.month)}-${padZero(newTask.duDate.day)}`}
                     onChange={(e) => {
                         const dateParts = e.target.value.split("-");
                         setNewTask({
@@ -78,20 +77,37 @@ const TodoList = () => {
                         });
                     }}
                 />
-                <button onClick={addTask}>Add Task</button>
+                <input 
+                    type="time"
+                    value={`${padZero(newTask.duDate.hour)}:${padZero(newTask.duDate.minute)}`}
+                    onChange={(e) => {
+                        const timeParts = e.target.value.split(':');
+                        setNewTask({
+                            ...newTask,
+                            duDate: {
+                                ...newTask.duDate,
+                                hour: parseInt(timeParts[0]),
+                                minute: parseInt(timeParts[1])
+                            }
+                        });
+                    }}
+                />
+
+                <button onClick={handleAddTask}>Add Task</button>
             </div>
 
             <h1>Todo List</h1>
             <div>
                 <h2>Todo</h2>
                 <ul>
-                    {filterTasksByStatus(TodoStatus.TODO).map(task => (
+                    {taskList.filter(task => task.status === TodoStatus.TODO).map(task => (
                         <li key={task.id}>
                             <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.year}</span>
+                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
+                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
                             <span>{task.status}</span>
-                            <button onClick={() => removeTask(task.id)}>Delete</button>
+                            <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
@@ -99,13 +115,14 @@ const TodoList = () => {
             <div>
                 <h2>In progress</h2>
                 <ul>
-                    {filterTasksByStatus(TodoStatus.INPROGRESS).map(task => (
+                    {taskList.filter(task => task.status === TodoStatus.INPROGRESS).map(task => (
                         <li key={task.id}>
-                              <span>{task.description}</span>
+                            <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.year}</span>
+                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
+                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
                             <span>{task.status}</span>
-                            <button onClick={() => removeTask(task.id)}>Delete</button>
+                            <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
@@ -113,20 +130,20 @@ const TodoList = () => {
             <div>
                 <h2>Done</h2>
                 <ul>
-                    {filterTasksByStatus(TodoStatus.DONE).map(task => (
+                    {taskList.filter(task => task.status === TodoStatus.DONE).map(task => (
                         <li key={task.id}>
-                              <span>{task.description}</span>
+                            <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.year}</span>
+                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
+                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
                             <span>{task.status}</span>
-                            <button onClick={() => removeTask(task.id)}>Delete</button>
+                            <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
             </div>
-            
         </div>
     );
-}
+};
 
 export default TodoList;
