@@ -1,11 +1,11 @@
 import  { useState } from "react";
-import { TodoItem,} from "../model/todo-item";
+import { TodoItem } from "../model/todo-item";
 import { TodoStatus } from "../model/todo-status";
 import { Todopriority } from "../model/todo-priority";
-import { TaskManager } from '../utils/TaskManager';
+import TodoManager from '../component/TodoManager';
 
 const TodoList = () => {
-    const { taskList, addTask, removeTask } = TaskManager();
+    const { taskList, addTask, removeTask } = TodoManager();
     const [newTask, setNewTask] = useState<TodoItem>({
         id: 0,
         description: '',
@@ -31,7 +31,7 @@ const TodoList = () => {
         removeTask(taskId);
     };
 
-    function padZero(num: number): string {
+    const padZero = (num: number): string => {
         return num < 10 ? `0${num}` : `${num}`;
     }
 
@@ -92,7 +92,6 @@ const TodoList = () => {
                         });
                     }}
                 />
-
                 <button onClick={handleAddTask}>Add Task</button>
             </div>
 
@@ -104,8 +103,8 @@ const TodoList = () => {
                         <li key={task.id}>
                             <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
-                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
+                            <span>{padZero(task.duDate.day)}/{padZero(task.duDate.month)}/{task.duDate.year}</span>
+                            <span>{padZero(task.duDate.hour)}:{padZero(task.duDate.minute)}</span>
                             <span>{task.status}</span>
                             <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
@@ -119,8 +118,8 @@ const TodoList = () => {
                         <li key={task.id}>
                             <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
-                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
+                            <span>{padZero(task.duDate.day)}/{padZero(task.duDate.month)}/{task.duDate.year}</span>
+                            <span>{padZero(task.duDate.hour)}:{padZero(task.duDate.minute)}</span>
                             <span>{task.status}</span>
                             <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
@@ -134,8 +133,8 @@ const TodoList = () => {
                         <li key={task.id}>
                             <span>{task.description}</span>
                             <span>{task.priority}</span>
-                            <span>{task.duDate.day}/{task.duDate.month}/{task.duDate.year}</span>
-                            <span>{task.duDate.hour}:{task.duDate.minute}</span>
+                            <span>{padZero(task.duDate.day)}/{padZero(task.duDate.month)}/{task.duDate.year}</span>
+                            <span>{padZero(task.duDate.hour)}:{padZero(task.duDate.minute)}</span>
                             <span>{task.status}</span>
                             <button onClick={() => handleRemoveTask(task.id)}>Delete</button>
                         </li>
