@@ -1,18 +1,17 @@
-import { useState } from 'react';
-import { TodoItem } from '../model/todo-item';
+import { TodoItem } from "../model/todo-item";
 
-const TodoManager = () => {
-    const [taskList, setTaskList] = useState<TodoItem[]>([]);
+export class TodoManager {
+	taskList: TodoItem[];
+	constructor(tabTask: TodoItem[]) {
+		this.taskList = tabTask;
+	}
 
-    const addTask = (newTask: TodoItem) => {
-        setTaskList([...taskList, newTask]);
-    };
+	addTask(newTask: TodoItem): void {
+		this.taskList.push(newTask);
+	}
 
-    const removeTask = (taskId: number) => {
-        setTaskList(taskList.filter(task => task.id !== taskId));
-    };
-
-    return { taskList, addTask, removeTask };
-};
-
-export default TodoManager;
+	removeTask(taskId: number): TodoItem[] {
+		this.taskList = this.taskList.filter((task) => task.id !== taskId);
+		return this.taskList;
+	}
+}
