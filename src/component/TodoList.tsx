@@ -3,11 +3,14 @@ import { TodoItem } from "../model/todo-item";
 import { TodoStatus } from "../model/todo-status";
 import { Todopriority } from "../model/todo-priority";
 import { TodoManager } from "../component/TodoManager";
+import { toast } from "react-toastify";
 import "tailwindcss/tailwind.css";
 
 const TodoList = () => {
 	const [tasks, setTasks] = useState<TodoItem[]>([]);
 	const myTodoManager = new TodoManager(tasks);
+	const [searchTerm, setSearchTerm] = useState<string>("");
+
 	const [newTask, setNewTask] = useState<TodoItem>({
 		id: 0,
 		description: "",
@@ -31,6 +34,7 @@ const TodoList = () => {
 				status: TodoStatus.TODO,
 				priority: Todopriority.LOW,
 			});
+			toast.success("Task added successfully");
 		}
 	};
 
@@ -39,12 +43,26 @@ const TodoList = () => {
 		setTasks(newTab);
 	};
 
+	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(event.target.value);
+	};
+
+	const filteredTasks = myTodoManager.searchingTask(searchTerm);
+
 	const padZero = (num: number): string => {
 		return num < 10 ? `0${num}` : `${num}`;
 	};
 
 	return (
 		<div className="container mx-auto p-4">
+			<h2 className="text-xl font-bold mb-4">Search a task</h2>
+			<input
+				type="text"
+				value={searchTerm}
+				onChange={handleSearch}
+				placeholder="Search tasks"
+				className="border p-2 rounded mb-4 w-full"
+			/>
 			<div className="mb-6">
 				<h2 className="text-xl font-bold mb-4">Add New Task</h2>
 				<input
@@ -128,7 +146,7 @@ const TodoList = () => {
 				<div className="bg-red-300 p-4 rounded w-80 m-2">
 					<h2 className="text-xl font-bold mb-2">Todo</h2>
 					<ul className="list-disc pl-5">
-						{myTodoManager.taskList
+						{filteredTasks
 							.filter((task) => task.status === TodoStatus.TODO)
 							.map((task) => (
 								<li
@@ -136,7 +154,7 @@ const TodoList = () => {
 									className="mb-2 flex justify-between items-center"
 								>
 									<div className="flex flex-wrap text-left justify-between">
-										<span className="font-semibold mr-2">
+										<span className="font-semibold mr-2 break-all">
 											{task.description}
 										</span>
 										<span className="text-gray-600">[{task.priority}]</span>
@@ -161,7 +179,7 @@ const TodoList = () => {
 				<div className="bg-orange-300 p-4 rounded w-80 m-2">
 					<h2 className="text-xl font-bold mb-2">In Progress</h2>
 					<ul className="list-disc pl-5">
-						{myTodoManager.taskList
+						{filteredTasks
 							.filter((task) => task.status === TodoStatus.INPROGRESS)
 							.map((task) => (
 								<li
@@ -169,7 +187,7 @@ const TodoList = () => {
 									className="mb-2 flex justify-between items-center"
 								>
 									<div className="flex flex-wrap text-left justify-between">
-										<span className="font-semibold mr-2">
+										<span className="font-semibold mr-2 break-all">
 											{task.description}
 										</span>
 										<span className="text-gray-600">[{task.priority}]</span>
@@ -194,7 +212,7 @@ const TodoList = () => {
 				<div className="bg-green-300 p-4 rounded w-80 m-2">
 					<h2 className="text-xl font-bold mb-2">Done</h2>
 					<ul className="list-disc pl-5">
-						{myTodoManager.taskList
+						{filteredTasks
 							.filter((task) => task.status === TodoStatus.DONE)
 							.map((task) => (
 								<li
@@ -202,7 +220,7 @@ const TodoList = () => {
 									className="mb-2 flex justify-between items-center"
 								>
 									<div className="flex flex-wrap text-left justify-between">
-										<span className="font-semibold mr-2">
+										<span className="font-semibold mr-2 break-all">
 											{task.description}
 										</span>
 										<span className="text-gray-600">[{task.priority}]</span>
