@@ -1,4 +1,5 @@
 import { TodoItem } from "../model/todo-item";
+import { useEffect } from "react";
 
 /**
  * Classe TodoManager
@@ -7,6 +8,9 @@ export class TodoManager {
 	taskList: TodoItem[];
 	constructor(tabTask: TodoItem[]) {
 		this.taskList = tabTask;
+		useEffect(() => {
+			localStorage.setItem("tasks", JSON.stringify(this.taskList));
+		}, [this.taskList]);
 	}
 
 	/**
