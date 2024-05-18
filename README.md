@@ -32,10 +32,15 @@ A fancy and beautiful to-do list project developed with TypeScript and React.js.
 
 - TypeScript
 - React.js
+- [react-toastify](https://fkhadra.github.io/react-toastify/introduction/)
+- [react-mui](https://mui.com/)
+- [react-emotion](https://emotion.sh/docs/introduction)
 
 ## Folder Structure 📁
 - `src`: Contains the source code of the project.
   - `components`: Contains reusable React components.
+  - `model`: Contains types utilised in project.
+    - `toast`: external library [react-toastify](https://fkhadra.github.io/react-toastify/introduction/) typed.
   - `assets`: Contains utility functions.
 - `public`: Contains static assets such as images and fonts.
 - `README.md`: The main documentation file.
