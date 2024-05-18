@@ -36,11 +36,13 @@ export class TodoManager {
 	/**
 	 * Fonction de recherche de tâches dans le tableau
 	 * @param contentSearching contenu de la description à rechercher dans les tâches
+	 * @param status statut de la tâche
 	 * @returns
 	 */
-	searchingTask(contentSearching: string): TodoItem[] {
-		return this.taskList.filter((task) =>
-			task.description.includes(contentSearching)
+	searchingTask(contentSearching: string, status: string): TodoItem[] {
+		return this.taskList.filter(
+			(task) =>
+				task.description.includes(contentSearching) && task.status === status
 		);
 	}
 }

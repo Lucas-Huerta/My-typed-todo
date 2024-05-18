@@ -90,14 +90,12 @@ const TodoList = () => {
 	};
 
 	const filterTasksByStatus = (status: TodoStatus) => {
-		return tasks.filter((task) => task.status === status);
+		return myTodoManager.searchingTask(searchTerm, status);
 	};
 
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
-
-	// const filteredTasks = myTodoManager.searchingTask(searchTerm);
 
 	const padZero = (num: number): string => {
 		return num < 10 ? `0${num}` : `${num}`;
