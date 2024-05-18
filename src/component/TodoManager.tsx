@@ -1,18 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TodoItem } from '../model/todo-item';
 
 const TodoManager = () => {
-    const [taskList, setTaskList] = useState<TodoItem[]>([]);
+    const [taskList, setTaskList] = useState<TodoItem[]>(() => {
+        const savedTasks = localStorage.getItem('tasks');
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
 
-    const addTask = (newTask: TodoItem) => {
-        setTaskList([...taskList, newTask]);
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(taskList));
+    }, [taskList]);
+
+    const addTask = (task: TodoItem) => {
+        setTaskList([...taskList, task]);
     };
 
     const removeTask = (taskId: number) => {
         setTaskList(taskList.filter(task => task.id !== taskId));
     };
 
-    return { taskList, addTask, removeTask };
+    return {
+        taskList,
+        addTask,
+        removeTask
+    };
 };
 
 export default TodoManager;
