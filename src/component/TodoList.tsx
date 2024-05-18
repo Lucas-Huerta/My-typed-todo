@@ -3,7 +3,8 @@ import { TodoItem } from "../model/todo-item";
 import { TodoStatus } from "../model/todo-status";
 import { Todopriority } from "../model/todo-priority";
 import { TodoManager } from "../component/TodoManager";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "tailwindcss/tailwind.css";
 
 const TodoList = () => {
@@ -35,12 +36,15 @@ const TodoList = () => {
 				priority: Todopriority.LOW,
 			});
 			toast.success("Task added successfully");
+		} else {
+			toast.error("Please enter a task description");
 		}
 	};
 
 	const handleRemoveTask = (taskId: number) => {
 		const newTab = myTodoManager.removeTask(taskId);
 		setTasks(newTab);
+		toast.success("Task removed successfully");
 	};
 
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,6 +247,7 @@ const TodoList = () => {
 					</ul>
 				</div>
 			</div>
+			<ToastContainer />
 		</div>
 	);
 };
